@@ -1,19 +1,34 @@
 <?php
+/**
+ * The core service of the plugin.
+ *
+ * @link       http://www.bobsyd.com/demos
+ * @since      1.0.0
+ *
+ * @package    Fpi
+ * @subpackage Fpi/src
+ */
+
+/**
+ * The core service of the plugin.
+ *
+ * All service logic here 
+ *
+ * @package    Fpi
+ * @subpackage Fpi/src
+ * @author     Bob Xiao
+ */
 
 class Fpi_Service
 {
-    public function fpi_form_submit()
-    {
-        // access right ?????
-        if (wp_doing_ajax() &&  wp_verify_nonce($_POST['nonce'], 'fpi_admin_save')) {
-            $jsonData = wp_unslash($_POST['jsonData']);
-            $result = $this->fpi_process_fb_data($jsonData);
-            wp_send_json($result);
-        } else {
-            wp_send_json([['status'=>'fail', 'msg'=>'API access deny']]);
-        }
-    }
-    public function fpi_process_fb_data($jsonData)
+    /**
+     * Process json data from Facebook
+     *
+     * @since     1.0.0
+     * @param     json      $jsonData           
+     * @return    array     Process result
+     */
+    public function fpi_process_fb_data($jsonData):array
     {
         $returnData = [];
         $data = json_decode($jsonData, true);
@@ -29,16 +44,24 @@ class Fpi_Service
         }
         return $returnData;
     }
-
+    /**
+     * import single post data from Facebook
+     *
+     * @since     1.0.0
+     * @param     array     $facebook_post        
+     * @return    array     Import result
+     */
     private function fpi_create_post(array $facebook_post):array
     {
         if ($this->fpi_validate_post_data($facebook_post)) {
             $create_date = strtotime($facebook_post['created_time']);
+            // name for normal post and story for video post, any others？
             $title = ($facebook_post['name'])?? (($facebook_post['story']) ?? 'No title');
             $content =
-            "Post from Facebook user".$facebook_post['from']['name']."<br>"
-            ."<a href='".$facebook_post['link']."'>".$title."</a></br>"
-             .$facebook_post['message'] ."<br/>";
+                "A new post from Facebook user: ".$facebook_post['from']['name']."<br>"
+                .$facebook_post['message'] ."<br/>"
+                ."<a href='".$facebook_post['link']."'>".$title."</a></br>";
+
             $postarr = [
                 'post_date'=> date("Y-m-d H:i:s", $create_date),
                 'post_content'=>$content,
@@ -46,10 +69,9 @@ class Fpi_Service
                 'post_status' => 'Publish'
             ];
             $post_id = wp_insert_post($postarr);
-
             return [
                 'status'=> 'success',
-                'msg' => 'Facebook post '. $facebook_post['id']. " has been inserted. <a href='".get_permalink($post_id)."'>View</a><br/>",
+                'msg' => 'Facebook post '. $facebook_post['id']. " has been imported. <a href='".get_permalink($post_id)."'>View</a><br/>",
             ];
         } else {
             return [
@@ -58,9 +80,16 @@ class Fpi_Service
             ];
         }
     }
-
+    /**
+     * Validate Facebook data 
+     *
+     * @since     1.0.0
+     * @param     array     $facebook_post 
+     * @return    bool      
+     */
     private function fpi_validate_post_data(array $facebook_post):bool
     {
+        //TODO  should use a schema validate 
         return (isset($facebook_post['id'])
             && isset($facebook_post['created_time'])
             && isset($facebook_post['from']['name'])

@@ -18,7 +18,7 @@
  *
  * @package    Fpi
  * @subpackage Fpi/admin
- * @author     Bob Xiao <wanbo.xiao@gmail.com>
+ * @author     Bob Xiao
  */
 
 class Fpi_Admin
@@ -100,6 +100,8 @@ class Fpi_Admin
 
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/fpi-admin.js', array( 'jquery' ), $this->version, false);
 
+        /* some data can be used in script */
+        
         wp_localize_script(
             $this->plugin_name,
             'fpi_js_data',
@@ -112,9 +114,12 @@ class Fpi_Admin
         );
     }
 
-    //---------------------------------------------------
-    // MENU SECTION
-    //---------------------------------------------------
+    /**
+     *    ---------------------------------------------------
+     *    MENU SECTION
+     *    ---------------------------------------------------
+     */
+
     public function menu_section()
     {
         add_menu_page('Facebook posts import', 'Facebook posts import', 'publish_posts', 'fb-post-import', array($this, 'menu_section_display'), 'dashicons-facebook-alt', 76);
@@ -131,75 +136,21 @@ class Fpi_Admin
         }
     }
 
+    /**
+     *    ---------------------------------------------------
+     *    Ajax url handle
+     *    ---------------------------------------------------
+     */
 
-    //---------------------------------------------------
-    // Ajax
-    //---------------------------------------------------
     public function fpi_form_submit()
     {
-        // access right ?????
         if (wp_doing_ajax() &&  wp_verify_nonce($_POST['nonce'], 'fpi_admin_save')) {
             $jsonData = wp_unslash($_POST['jsonData']);
             $service = new Fpi_Service();
             $result = $service->fpi_process_fb_data($jsonData);
             wp_send_json($result);
         } else {
-            echo esc_html__('unsafe', 'fpi');
+            wp_send_json([['status'=>'fail', 'msg'=>'API access deny']]);
         }
     }
-    /*
-        public function fpi_process_fb_data($jsonData)
-        {
-            $returnData = [];
-            $data = json_decode($jsonData, true);
-            if (isset($data['data']) && is_array($data['data'])) {
-                foreach ($data['data'] as $facebook_post) {
-                    $returnData[] = $this->fpi_create_post($facebook_post);
-                }
-            } else {
-                $returnData[] = [
-                    'status' => 'fail',
-                    'msg' => esc_html__('Invalid data format(Json needed)', 'fpi'),
-                ];
-            }
-            return $returnData;
-        }
-    
-        public function fpi_create_post(array $facebook_post):array
-        {
-            if ($this->fpi_validate_post_data($facebook_post)) {
-                $create_date = strtotime($facebook_post['created_time']);
-                $content =
-                "Post from Facebook user".$facebook_post['from']['name']."<br>"
-                ."<a href='http://trib.al/NR1shY9'>".$facebook_post['name']."</a></br>"
-                 .$facebook_post['message'] ."<br/>";
-                $postarr = [
-                    'post_date'=> date("Y-m-d H:i:s", $create_date),
-                    'post_content'=>$content,
-                    'post_title'=>$facebook_post['name'],
-                    'post_status' => 'Publish'
-                ];
-                $post_id = wp_insert_post($postarr);
-    
-                return [
-                    'status'=> esc_html__('success', 'fpi'),
-                    'msg' => 'Facebook post '. $facebook_post['id']. " has been inserted. <a href='".get_permalink($post_id)."'>View</a><br/>",
-                ];
-            } else {
-                return [
-                    'status' => 'fail',
-                    'msg' => esc_html__('Invalid facebook data format '.((isset($facebook_post['id'])?'at facebook ID:'.$facebook_post['id'] : '')), 'fpi'),
-                ];
-            }
-        }
-    
-        private function fpi_validate_post_data(array $facebook_post):bool
-        {
-            return (isset($facebook_post['id'])
-                && isset($facebook_post['created_time'])
-                && isset($facebook_post['from']['name'])
-                && isset($facebook_post['name'])
-                && isset($facebook_post['message'])
-            );
-        }*/
 }

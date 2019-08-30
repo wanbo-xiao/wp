@@ -18,7 +18,7 @@
  *
  * @package    Fpi
  * @subpackage Fpi/public
- * @author     Bob Xiao <wanbo.xiao@gmail.com>
+ * @author     Bob Xiao
  */
 class Fpi_Public {
 

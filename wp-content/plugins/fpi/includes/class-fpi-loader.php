@@ -19,7 +19,7 @@
  *
  * @package    Fpi
  * @subpackage Fpi/includes
- * @author     Bob Xiao <wanbo.xiao@gmail.com>
+ * @author     Bob Xiao
  */
 class Fpi_Loader {
 

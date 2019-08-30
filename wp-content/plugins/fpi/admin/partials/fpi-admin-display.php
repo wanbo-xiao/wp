@@ -16,18 +16,11 @@
 <!-- This file should primarily consist of HTML with a little bit of PHP. -->
 <h1>Facebook posts import</h1>
 <div id="fpi-body">
-  <div class="fpi-tab">
-    <button id="fpi-options-button" class="fpi-tab-link fpi-tab-current" data-tab="fpi-tab-1">
-      <?php echo(esc_html__('About', 'fpi')); ?>
-    </button>
-    <button id="fpi-customize-button" class="fpi-tab-link" data-tab="fpi-tab-2">
-      <?php echo(esc_html__('Plain JSON', 'fpi')); ?>
-    </button>
-    <button id="fpi-customize-button" class="fpi-tab-link" data-tab="fpi-tab-3">
-      <?php echo(esc_html__('File upload', 'fpi')); ?>
-    </button>
+    <div>
+        <textarea id="fpi-json-input"></textarea>
+        <button id='fpi-json-single-data'>Use single test case</button>
+        <button id='fpi-json-large-data'>Use large test case</button>
+        <input id='fpi-json-file-upload' type='file' value='upload'/> 
+        <button id='fpi-json-submit'>Submit</button>
   </div>
-  <?php include_once plugin_dir_path(__FILE__) . 'fpi-admin-menu-about.php'; ?>
-  <?php include_once plugin_dir_path(__FILE__) . 'fpi-admin-menu-plain-json.php'; ?>
-  <?php include_once plugin_dir_path(__FILE__) . 'fpi-admin-menu-file-upload.php'; ?>
 </div>

@@ -1,14 +1,7 @@
 jQuery(document).ready(function($) {
     'use strict';
 
-    $('.fpi-tab-link').on('click', (e) => {
-        let tab_id = $(e.currentTarget).attr('data-tab');
-        $('.fpi-tab-link').removeClass('fpi-tab-current');
-        $('.fpi-tab-content').removeClass('fpi-tab-current');
-
-        $(e.currentTarget).addClass('fpi-tab-current');
-        $("#" + tab_id).addClass('fpi-tab-current');
-    });
+    /* Pre-load json Data */
 
     $('#fpi-json-single-data').on('click', (e) => {
         $('#fpi-json-input').load(fpi_js_data.single_json_file)
@@ -26,7 +19,7 @@ jQuery(document).ready(function($) {
         reader.readAsText(e.currentTarget.files[0]);
     })
 
-
+    /* Submit function */
 
     $('#fpi-json-submit').on('click', (e) => {
         let jsonData = $('#fpi-json-input').text();
@@ -50,16 +43,7 @@ jQuery(document).ready(function($) {
                 );
             }
         });
-
-
     });
-
-
-
-
-
-
-
     /**
      * All of the code for your admin-facing JavaScript source
      * should reside in this file.
@@ -87,6 +71,4 @@ jQuery(document).ready(function($) {
      * Although scripts in the WordPress core, Plugins and Themes may be
      * practising this, we should strive to set a better example in our own work.
      */
-
-
 });

@@ -25,7 +25,7 @@
  * @since      1.0.0
  * @package    Fpi
  * @subpackage Fpi/includes
- * @author     Bob Xiao <wanbo.xiao@gmail.com>
+ * @author     Bob Xiao
  */
 class Fpi
 {
@@ -130,9 +130,9 @@ class Fpi
          */
         require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-fpi-public.php';
 
-         /**
-         * The class responsible for defining all customize functions of plugin.
-         */
+        /**
+        * The class responsible for defining all customize functions of plugin.
+        */
         require_once plugin_dir_path(dirname(__FILE__)) . 'src/fpi-service.php';
 
 
@@ -171,13 +171,12 @@ class Fpi
 
         //MENU SECTION
         $this->loader->add_action('admin_menu', $plugin_admin, 'menu_section');
-        //Ajax
+        //AJAX CALL
         $this->loader->add_action('wp_ajax_fpi_form_submit', $plugin_admin, 'fpi_form_submit');
     }
 
     /**
-     * Register all of the hooks related to the public-facing functionality
-     * of the plugin.
+     * Register command
      *
      * @since    1.0.0
      * @access   private
@@ -203,9 +202,6 @@ class Fpi
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
     }
-
-
-
 
     /**
      * Run the loader to execute all of the hooks with WordPress.
