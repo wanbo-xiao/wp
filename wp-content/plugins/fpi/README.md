@@ -22,6 +22,9 @@ Using data from the Facebook Graph API, create your own WordPress plugin that wi
 * After activate the plugin you can see a new menu item in sidebar
 * ``` wp fpi_command insert {json_file_path} ``` 
 
-
+## Screenshot
+![](/public/img/screenshot-1.png)
+![](/public/img/screenshot-2.png)
+![](/public/img/screenshot-3.png)
 
 
