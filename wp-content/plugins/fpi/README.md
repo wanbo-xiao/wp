@@ -23,8 +23,8 @@ Using data from the Facebook Graph API, create your own WordPress plugin that wi
 * ``` wp fpi_command insert {json_file_path} ``` 
 
 ## Screenshot
-![](/public/img/screenshot-1.png)
-![](/public/img/screenshot-2.png)
-![](/public/img/screenshot-3.png)
+![](public/img/screenshot-1.png)
+![](public/img/screenshot-2.png)
+![](public/img/screenshot-3.png)
 
 
